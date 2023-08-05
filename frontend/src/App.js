@@ -1,18 +1,15 @@
-import {BrowserRouter as Router,Route,Routes} from "react-router-dom";
-import Login from "./User/login";
-import UserLandPage from "./pages/userLandPage";
+import { BrowserRouter as Router } from "react-router-dom";
+import { UserProvider } from "./context/UserProvider";
+import AppRouter from "./routes";
 
 function App() {
-  return (
-  
-   <Router>
-        <Routes>
-          <Route path="/" element={<Login/>}/> 
-          <Route path="/userLandPage" element={<UserLandPage/>}/> 
-          
 
-        </Routes>
+  return (
+    <UserProvider>
+      <Router>
+        <AppRouter/>
       </Router>
+    </UserProvider>
   );
 }
 

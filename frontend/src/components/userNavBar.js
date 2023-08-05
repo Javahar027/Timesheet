@@ -7,14 +7,16 @@ import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 import "../CalendarCustom.css";
-import indiaHolidays from "../data/indiaHolidays.json"
+import indiaHolidays from "../data/indiaHolidays.json";
+import finlandHolidays from "../data/finlandHolidays.json";
+import chinaHolidays from "../data/chinaHolidays.json";
 
 const UserNavbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("user");
-    navigate("/");
+    window.location.reload();
   };
 
   const customStyles = {
@@ -31,6 +33,10 @@ const UserNavbar = () => {
   let subtitle;
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modalIsOpenHol, setIsOpenHol] = useState(false);
+
+  const [holidayTable, setHolidayTable] = useState(false);
+  const [country, setCountry] = useState("");
+  const [tableData, setTableData] = useState();
 
   function openModal() {
     setIsOpen(true);
@@ -50,7 +56,19 @@ const UserNavbar = () => {
   }
   function closeModalHol() {
     setIsOpenHol(false);
+    setHolidayTable(false);
   }
+
+  const handleCountry = () => {
+    setHolidayTable(true);
+    if (country == "India") {
+      setTableData(indiaHolidays);
+    } else if (country == "Finland") {
+      setTableData(finlandHolidays);
+    } else if (country == "China") {
+      setTableData(chinaHolidays);
+    }
+  };
 
   return (
     <>
@@ -77,6 +95,7 @@ const UserNavbar = () => {
         </Modal>
 
         <Modal
+          // className="holidayModel"
           isOpen={modalIsOpenHol}
           onAfterOpen={afterOpenModal}
           onRequestClose={closeModalHol}
@@ -88,33 +107,43 @@ const UserNavbar = () => {
             <button onClick={closeModalHol}>close</button>
           </div>
 
-          <div>
-            <table className="styled-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Holiday Detail</th>
-                  
-                </tr>
-              </thead>
+          <div className="holidayContainer">
+            <label className="countryLabel">Select Country</label>
+            <select
+              className="countryDropDown"
+              required="true"
+              onChange={(e) => {
+                setCountry(e.target.value);
+              }}
+            >
+              <option value="">Select a Country</option>
+              <option value="India">India</option>
+              <option value="Finland">Finland</option>
+              <option value="China">China</option>
+            </select>
+            <button onClick={handleCountry}>Submit</button>
 
-              <tbody>
-
-                {indiaHolidays.map((indiaHolidays) =>
-                    <tr key={indiaHolidays.id}>
-                      <td>{indiaHolidays.date}</td>
-                      <td>{indiaHolidays.name}</td>
-
-
+            {holidayTable ? (
+              <div className="fixTableHead">
+                <table className="styled-table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Holiday Detail</th>
                     </tr>
+                  </thead>
 
-                )}
-                {/* <tr>
-                  <td>{indiaHolidays[1].date}</td>
-                  <td>{indiaHolidays[1].name}</td>
-                </tr> */}
-              </tbody>
-            </table>
+                  <tbody>
+                    {tableData.map((val) => (
+                      <tr key={val.id}>
+                        <td>{val.date}</td>
+                        <td>{val.name}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : null}
           </div>
         </Modal>
       </div>
@@ -128,8 +157,12 @@ const UserNavbar = () => {
         </div>
 
         <div>
-          <button onClick={openModalHol}>Holiday</button>
-          <button onClick={openModal}>Calender</button>
+          <button className="buttonNavBar" onClick={openModalHol}>
+            Holiday
+          </button>
+          <button className="buttonNavBar" onClick={openModal}>
+            Calender
+          </button>
           <button onClick={handleLogout}>Logout</button>
         </div>
       </header>

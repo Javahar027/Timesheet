@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import "../App.css";
-import Axios from "axios";
+import API from "../service";
 import UserNavbar from "../components/userNavBar";
 import Calendar from "react-calendar";
-// import "react-calendar/dist/Calendar.css";
 import "../../node_modules/react-calendar/dist/Calendar.css";
 import Icon from "react-crud-icons";
-// import "react-crud-icons/dist/css/react-crud-icons.css";
-import Modal from 'react-modal';
-import indiaHolidays from "../data/indiaHolidays.json"
+import "../../node_modules/react-crud-icons/dist/css/react-crud-icons.css";
+import indiaHolidays from "../data/indiaHolidays.json";
 
 function UserLandPage() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -106,20 +104,27 @@ function UserLandPage() {
   const [thursdaywork, setThursdayWork] = useState("");
   const [fridaywork, setFridayWork] = useState("");
 
+  const [mondayworkUpdate, setMondayWorkUpdate] = useState("");
+  const [tuesdayworkUpdate, setTuesdayWorkUpdate] = useState("");
+  const [wednesdayworkUpdate, setWednesdayWorkUpdate] = useState("");
+  const [thursdayworkUpdate, setThursdayWorkUpdate] = useState("");
+  const [fridayworkUpdate, setFridayWorkUpdate] = useState("");
+
   const [editIdRow, setEditIdRow] = useState(false);
   const [valId, setValId] = useState(false);
   const [cancelSave, setCancelSave] = useState(false);
+  const [changeIcons, setChangeIcons] = useState(false);
 
   let updateId = [];
 
   useEffect(() => {
-    if (user[0].type === "E") {
+    if (user.type === "E") {
       setEditButton(false);
-    } else if (user[0].type === "M") {
+    } else if (user.type === "M") {
       setEditButton(true);
     }
-    Axios.get(
-      `http://localhost:3001/api/user/read?condition1=${user[0].managerid}&condition2=${startdate}&condition3=${enddate}`
+    API.get(
+      `/api/user/read?condition1=${user.managerid}&condition2=${startdate}&condition3=${enddate}`
     )
       .then((res) => {
         // console.log(res);
@@ -132,8 +137,8 @@ function UserLandPage() {
       })
       .catch((err) => console.log(err));
 
-    Axios.get(
-      `http://localhost:3001/api/userCheck/read?condition1=${user[0].managerid}&condition2=${startdate}&condition3=${user[0].id}`
+    API.get(
+      `/api/userCheck/read?condition1=${user.managerid}&condition2=${startdate}&condition3=${user.id}`
     )
       .then((res) => {
         console.log(res);
@@ -148,12 +153,12 @@ function UserLandPage() {
   }, []);
 
   const handleNewData = () => {
-    Axios.post("http://localhost:3001/api/userWeekdata", {
-      gedid: user[0].gedid,
-      name: user[0].name,
-      managerid: user[0].managerid,
-      managername: user[0].managername,
-      team: user[0].team,
+    API.post("/api/userWeekdata", {
+      gedid: user.gedid,
+      name: user.name,
+      managerid: user.managerid,
+      managername: user.managername,
+      team: user.team,
       mondaydate: week[0],
       tuesdaydate: week[1],
       wednesdaydate: week[2],
@@ -167,8 +172,8 @@ function UserLandPage() {
     }).then((response) => {
       if (response) {
         setUserCheck(false);
-        Axios.get(
-          `http://localhost:3001/api/user/read?condition1=${user[0].managerid}&condition2=${startdate}&condition3=${enddate}`
+        API.get(
+          `/api/user/read?condition1=${user.managerid}&condition2=${startdate}&condition3=${enddate}`
         )
           .then((res) => {
             // console.log(res);
@@ -187,17 +192,17 @@ function UserLandPage() {
   };
 
   const handleNewDataNext = () => {
-    Axios.post("http://localhost:3001/api/userWeekdata", {
-      gedid: user[0].gedid,
-      name: user[0].name,
-      managerid: user[0].managerid,
-      managername: user[0].managername,
-      team: user[0].team,
+    API.post("/api/userWeekdata", {
+      gedid: user.gedid,
+      name: user.name,
+      managerid: user.managerid,
+      managername: user.managername,
+      team: user.team,
       mondaydate: nextWeek[0],
       tuesdaydate: nextWeek[1],
       wednesdaydate: nextWeek[2],
       thursdaydate: nextWeek[3],
-      fridaydate: nextWeek[34],
+      fridaydate: nextWeek[4],
       mondaywork: mondaywork,
       tuesdaywork: tuesdaywork,
       wednesdaywork: wednesdaywork,
@@ -206,8 +211,8 @@ function UserLandPage() {
     }).then((response) => {
       if (response) {
         setUserCheck(false);
-        Axios.get(
-          `http://localhost:3001/api/user/read?condition1=${user[0].managerid}&condition2=${nextStartDate}&condition3=${nextEndDate}`
+        API.get(
+          `/api/user/read?condition1=${user.managerid}&condition2=${nextStartDate}&condition3=${nextEndDate}`
         )
           .then((res) => {
             // console.log(res);
@@ -228,13 +233,11 @@ function UserLandPage() {
   const handlePreviousWeek = () => {
     setUserCheck(false);
     setPrevHead(true);
-
     setprevButton(true);
     setnextButton(false);
-    setcurrButton(false);
 
-    Axios.get(
-      `http://localhost:3001/api/user/read?condition1=${user[0].managerid}&condition2=${prevStartDate}&condition3=${prevEndDate}`
+    API.get(
+      `/api/user/read?condition1=${user.managerid}&condition2=${prevStartDate}&condition3=${prevEndDate}`
     )
       .then((res) => {
         // console.log(res);
@@ -248,24 +251,19 @@ function UserLandPage() {
   };
 
   const handleCurrentWeek = () => {
-    setprevButton(false);
-    setnextButton(false);
-    setcurrButton(true);
     window.location.reload();
   };
-
+  console.log(nextButton);
   const handleNextWeek = () => {
     setData([]);
     setUserCheck(true);
     setPrevHead(false);
     setNextHead(true);
-
-    setprevButton(false);
     setnextButton(true);
-    setcurrButton(false);
+    setprevButton(false);
 
-    Axios.get(
-      `http://localhost:3001/api/user/read?condition1=${user[0].managerid}&condition2=${nextStartDate}&condition3=${nextEndDate}`
+    API.get(
+      `/api/user/read?condition1=${user.managerid}&condition2=${nextStartDate}&condition3=${nextEndDate}`
     )
       .then((res) => {
         // console.log(res);
@@ -279,8 +277,8 @@ function UserLandPage() {
       })
       .catch((err) => console.log(err));
 
-    Axios.get(
-      `http://localhost:3001/api/userCheck/read?condition1=${user[0].managerid}&condition2=${nextStartDate}&condition3=${user[0].id}`
+    API.get(
+      `/api/userCheck/read?condition1=${user.managerid}&condition2=${nextStartDate}&condition3=${user.id}`
     )
       .then((res) => {
         console.log(res);
@@ -294,29 +292,46 @@ function UserLandPage() {
       .catch((err) => console.log(err));
   };
 
-  const handleEditButton = (e, id) => {
-    console.log(id);
+  const handleEditButton = (
+    e,
+    id,
+    mondaywork,
+    tuesdaywork,
+    wednesdaywork,
+    thursdaywork,
+    fridaywork
+  ) => {
+    setChangeIcons(true);
     setEditIdRow(true);
     setCancelSave(true);
     updateId.push(id);
     setValId(id);
+    setMondayWorkUpdate(mondaywork);
+    setTuesdayWorkUpdate(tuesdaywork);
+    setWednesdayWorkUpdate(wednesdaywork);
+    setThursdayWorkUpdate(thursdaywork);
+    setFridayWorkUpdate(fridaywork);
   };
 
   const handleCancel = () => {
-    setCancelSave(false);
-    // setEditButton(false);
-    setEditIdRow(false);
+    // setCancelSave(false);
+    setEditButton(true);
+    setEditIdRow(true);
+    setChangeIcons(false);
+    setValId(false);
   };
 
   const handleSave = () => {
+    console.log("clicked");
     setCancelSave(false);
-    Axios.put("http://localhost:3001/api/update", {
-      mondaywork: mondaywork,
-      tuesdaywork: tuesdaywork,
-      wednesdaywork: wednesdaywork,
-      thursdaywork: thursdaywork,
-      fridaywork: fridaywork,
-      id:valId
+    setEditIdRow(true);
+    API.put("/api/update", {
+      mondaywork: mondayworkUpdate,
+      tuesdaywork: tuesdayworkUpdate,
+      wednesdaywork: wednesdayworkUpdate,
+      thursdaywork: thursdayworkUpdate,
+      fridaywork: fridayworkUpdate,
+      id: valId,
     }).then((response) => {
       window.location.reload();
       // setData(
@@ -333,7 +348,7 @@ function UserLandPage() {
       //           thursdaywork:val.thursdaywork,
       //           mondaywork:val.mondaywork,
       //           fridaywork:val.fridaywork,
-              
+
       //         }
       //       : val;
       //   })
@@ -343,49 +358,32 @@ function UserLandPage() {
 
   // console.log(editButton);
 
-
-
   return (
     <div>
       <UserNavbar />
 
-
       <div className="userContainer">
         <div className="topContainer">
           <div className="fontBlack">
-            <h3>Welcome {user[0].name}, </h3>
+            <h3>Welcome {user.name}, </h3>
           </div>
-
-          {cancelSave ? (
-            <div className="topButtonContainer">
-              <div>
-                {" "}
-                <button onClick={handleCancel}>Cancel</button>
-              </div>
-              <div>
-                {" "}
-                <button onClick={handleSave}>Save</button>
-              </div>
-            </div>
-          ) : null}
         </div>
 
         <div className="topButtonContainer">
           <div>
-            <button
-              className="buttonBottom"
-              style={{
-                backgroundColor: prevButton ? "rgba(14, 86, 193, 0.929)" : "",
-                color: prevButton ? "white" : "",
-              }}
-              onClick={handlePreviousWeek}
-            >
-              Previous Week
-            </button>
+            <h2 className="fontHead">{nextButton}</h2>
+            <Icon
+              name="arrow-right"
+              tooltip="Next Week"
+              theme="light"
+              size="medium"
+              onClick={handleNextWeek}
+              disabled={nextButton}
+            />
           </div>
 
           <div>
-            <button
+            {/* <button
               className="buttonBottom"
               style={{
                 backgroundColor: currButton ? "rgba(14, 86, 193, 0.929)" : "",
@@ -394,20 +392,22 @@ function UserLandPage() {
               onClick={handleCurrentWeek}
             >
               Current Week
+            </button> */}
+            <button onClick={handleCurrentWeek} className="buttonCurrent">
+              Current Week
             </button>
           </div>
 
           <div>
-            <button
-              className="buttonBottom"
-              style={{
-                backgroundColor: nextButton ? "rgba(14, 86, 193, 0.929)" : "",
-                color: nextButton ? "white" : "",
-              }}
-              onClick={handleNextWeek}
-            >
-              Next Week
-            </button>
+            <h2 className="fontHead">{nextButton}</h2>
+            <Icon
+              name="arrow-left"
+              tooltip="Previous Week"
+              theme="light"
+              size="medium"
+              onClick={handlePreviousWeek}
+              disabled={prevButton}
+            />
           </div>
         </div>
 
@@ -467,10 +467,10 @@ function UserLandPage() {
                 {userCheck ? (
                   <tr>
                     {editButton ? <th></th> : null}
-                    <td>{user[0].id}</td>
-                    <td>{user[0].name}</td>
-                    <td>{user[0].managername}</td>
-                    <td>{user[0].team}</td>
+                    <td>{user.id}</td>
+                    <td>{user.name}</td>
+                    <td>{user.managername}</td>
+                    <td>{user.team}</td>
                     <td>
                       <select
                         required="true"
@@ -567,32 +567,61 @@ function UserLandPage() {
 
                 {data.map((val) => (
                   <tr key={val.id}>
-                    {/* {editButton && !prevHead ?  <td><input value="test" type="checkbox"  onChange={e => checkboxChange(e,val.id)}/> </td>:null} */}
-
-                    {editButton && !prevHead ? (
+                    {editButton && !prevHead && val.id != valId ? (
                       <Icon
                         name="edit"
-                        // tooltip="Edit"
-                        theme="dark"
-                        size="medium"
-                        onClick={(e) => handleEditButton(e, val.id)}
+                        tooltip="Edit"
+                        theme="light"
+                        size="small"
+                        onClick={(e) =>
+                          handleEditButton(
+                            e,
+                            val.id,
+                            val.mondaywork,
+                            val.tuesdaywork,
+                            val.wednesdaywork,
+                            val.thursdaywork,
+                            val.fridaywork
+                          )
+                        }
                       />
+                    ) : changeIcons &&
+                      val.id == valId &&
+                      editIdRow &&
+                      !prevHead ? (
+                      <div>
+                        <Icon
+                          name="close"
+                          tooltip="Close"
+                          theme="light"
+                          size="small"
+                          onClick={handleCancel}
+                        />
+
+                        <Icon
+                          name="check"
+                          tooltip="Save"
+                          theme="light"
+                          size="small"
+                          onClick={handleSave}
+                        />
+                      </div>
                     ) : null}
 
                     <td>{val.gedid}</td>
                     <td>{val.name}</td>
-                    <td>{user[0].managername}</td>
-                    <td>{user[0].team}</td>
+                    <td>{user.managername}</td>
+                    <td>{user.team}</td>
 
                     {editIdRow && val.id == valId ? (
                       <td>
                         <select
                           required="true"
                           onChange={(e) => {
-                            setMondayWork(e.target.value);
+                            setMondayWorkUpdate(e.target.value);
                           }}
                         >
-                          <option name="" value="Select type"></option>
+                          <option value="">{val.mondaywork}</option>
                           <option value="WFH">WFH</option>
                           <option value="ITEC">ITEC</option>
                           <option value="LEAVE">LEAVE</option>
@@ -612,10 +641,10 @@ function UserLandPage() {
                         <select
                           required="true"
                           onChange={(e) => {
-                            setTuesdayWork(e.target.value);
+                            setTuesdayWorkUpdate(e.target.value);
                           }}
                         >
-                          <option name="" value="Select type"></option>
+                          <option value="">{val.tuesdaywork}</option>
                           <option value="WFH">WFH</option>
                           <option value="ITEC">ITEC</option>
                           <option value="LEAVE">LEAVE</option>
@@ -635,10 +664,10 @@ function UserLandPage() {
                         <select
                           required="true"
                           onChange={(e) => {
-                            setWednesdayWork(e.target.value);
+                            setWednesdayWorkUpdate(e.target.value);
                           }}
                         >
-                          <option name="" value="Select type"></option>
+                          <option value="">{val.wednesdaywork}</option>
                           <option value="WFH">WFH</option>
                           <option value="ITEC">ITEC</option>
                           <option value="LEAVE">LEAVE</option>
@@ -658,10 +687,10 @@ function UserLandPage() {
                         <select
                           required="true"
                           onChange={(e) => {
-                            setThursdayWork(e.target.value);
+                            setThursdayWorkUpdate(e.target.value);
                           }}
                         >
-                          <option name="" value="Select type"></option>
+                          <option value="">{val.thursdaywork}</option>
                           <option value="WFH">WFH</option>
                           <option value="ITEC">ITEC</option>
                           <option value="LEAVE">LEAVE</option>
@@ -681,10 +710,10 @@ function UserLandPage() {
                         <select
                           required="true"
                           onChange={(e) => {
-                            setFridayWork(e.target.value);
+                            setFridayWorkUpdate(e.target.value);
                           }}
                         >
-                          <option name="" value="Select type"></option>
+                          <option value="">{val.fridaywork}</option>
                           <option value="WFH">WFH</option>
                           <option value="ITEC">ITEC</option>
                           <option value="LEAVE">LEAVE</option>
@@ -713,7 +742,6 @@ function UserLandPage() {
           </div>
         </div>
       </div>
-
     </div>
   );
 }

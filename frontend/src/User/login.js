@@ -1,10 +1,9 @@
 import { useState } from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
-import Axios from "axios";
+import API from "../service";
 
 function Login() {
-
   const navigate = useNavigate();
 
   const [loginDetails, setLoginDetails] = useState({
@@ -12,7 +11,7 @@ function Login() {
     password: "",
   });
 
-  const [loginStatus,setLoginStatus] = useState("")
+  const [loginStatus, setLoginStatus] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,20 +20,22 @@ function Login() {
 
   const handleSumbit = (e) => {
     e.preventDefault();
-    Axios.post("http://localhost:3001/api/userLogin", {
+    API.post("/api/userLogin", {
       id: loginDetails.id,
       password: loginDetails.password,
-    }).then((response) => {
-    
-      if (response.data.length > 0) {
-        localStorage.setItem('user', JSON.stringify(response.data));
+    })
+      .then((response) => {
+        console.log(response);
+        if (response.data) {
+          localStorage.setItem("user", JSON.stringify(response.data));
+          window.location.reload();
 
-        navigate("/userLandPage")
-      } else {
-        
-        setLoginStatus("Invalid ID or Password") ;
-      }
-    });
+          // navigate("/userLandPage");
+        } else {
+          setLoginStatus("Invalid ID or Password");
+        }
+      })
+      .catch((err) => {});
   };
 
   return (
@@ -62,10 +63,11 @@ function Login() {
               value={loginDetails.password}
             ></input>
 
-            <button  className="button1" type="submit">Submit</button>
+            <button className="button1" type="submit">
+              Submit
+            </button>
             <p className="loginStatus"> {loginStatus}</p>
           </form>
-          
         </div>
       </div>
     </div>

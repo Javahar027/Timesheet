@@ -95,13 +95,14 @@ button{
   flex-direction: row;
   justify-content: space-between;
   
+  
 }
 
 .topButtonContainer{
-  
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  flex-direction: row-reverse;
+  margin-right: 120px;
+  
 }
 
 .fontBlack{
@@ -111,8 +112,72 @@ button{
 .loginStatus{
   color: red;
 }
+.countryLabel{
+  color: rgba(14, 86, 193, 0.929);
+  font-weight: bolder;
+  padding: 15px;
+}
+.countryDropDown{
+  width: 70%;
+  height: 25px;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+.holidayContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.fontHead{
+  color: rgba(14, 86, 193, 0.929);
+  font-weight: bolder;
+}
+.buttonCurrent{
+  color:  rgba(14, 86, 193, 0.929);
+  font-weight: bolder;
+  border:none ;
+  cursor: pointer;
+  border-radius: 0px;
+  border-bottom:2px solid rgba(14, 86, 193, 0.929) ;
+}
 
+.buttonNavBar{
+  color: white;
+  background-color:rgba(14, 86, 193, 0.929) ;
+  font-weight: bolder;
+  border:none ;
+  cursor: pointer;
+  border-bottom:2px solid white ;
+}
 
+.holidayModel{
+  margin-top: 2%;
+  margin-left: 30%; 
+
+  background-color: white;
+  width: 40%;
+  
+}
+.fixTableHead {
+  overflow-y: auto;
+  height: 300px;
+}
+.fixTableHead thead th {
+  position: sticky;
+  top: 0;
+}
+table {
+  border-collapse: collapse;        
+  width: 100%;
+}
+th,
+td {
+  padding: 8px 15px;
+  
+}
+th {
+  background: rgba(14, 86, 193, 0.929);
+}
 
 
 
@@ -120,7 +185,7 @@ button{
 
 .styled-table {
   border-collapse: collapse;
-  margin: 25px 0;
+  margin: 10px 0;
   font-size: 0.9em;
   min-width: 400px;
   box-shadow: 0 0 20px rgba(203, 190, 190, 0.15);
