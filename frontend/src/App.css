@@ -179,6 +179,27 @@ th {
   background: rgba(14, 86, 193, 0.929);
 }
 
+.indiaHolidays{
+  color: red;
+}
+
+.rowItems{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+ 
+}
+.fontBlue{
+  color:  rgba(14, 86, 193, 0.929);
+  font-weight: bold;
+}
+.selectMonth{
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px; 
+  width: 170px;
+}
+
 
 
 

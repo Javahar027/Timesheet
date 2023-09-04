@@ -162,6 +162,25 @@ app.put("/api/update", auth, (req, res) => {
   );
 });
 
+
+
+app.get("/api/monthData/read", auth, (req, res) => {
+  const { condition1, condition2 } = req.query;
+
+  const sqlLogin =
+    "SELECT * FROM timesheet WHERE month(mondaydate) = ? or month(tuesdaydate) = ? or month(wednesdaydate) =? or month(thursdaydate) = ? or month(fridaydate) =? and gedid =?";
+  db.query(sqlLogin, [condition2,condition2,condition2,condition2,condition2,condition1], (err, result) => {
+    if (err) {
+      console.log(err);
+    }
+
+    if (result) {
+      console.log(result);
+      res.send(result);
+    }
+  });
+});
+
 app.listen(3001, () => {
   console.log("running on port 3001");
 });
