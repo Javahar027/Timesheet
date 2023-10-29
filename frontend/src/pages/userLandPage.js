@@ -7,6 +7,8 @@ import "../../node_modules/react-calendar/dist/Calendar.css";
 import Icon from "react-crud-icons";
 import "../../node_modules/react-crud-icons/dist/css/react-crud-icons.css";
 import indiaHolidays from "../data/indiaHolidays.json";
+import finlandHolidays from "../data/finlandHolidays.json";
+import chinaHolidays from "../data/chinaHolidays.json";
 import { redirect } from "react-router-dom";
 
 function UserLandPage() {
@@ -43,6 +45,12 @@ function UserLandPage() {
   const [month, setMonth] = useState("");
   const [monthID, setMonthID] = useState("");
 
+  const tableData = [
+    { country: "India", data: indiaHolidays },
+    { country: "Finland", data: finlandHolidays },
+    { country: "China", data: chinaHolidays },
+  ];
+
   let indiaHoliday = indiaHolidays;
   let indiaHolidayDate = [];
 
@@ -56,8 +64,7 @@ function UserLandPage() {
   let prevWeek = [];
   let nextWeek = [];
 
-  let currMonth =  curr.getMonth();
-
+  let currMonth = curr.getMonth();
 
   for (let i = 1; i <= 7; i++) {
     let first = curr.getDate() - curr.getDay() + i;
@@ -356,7 +363,6 @@ function UserLandPage() {
   };
 
   const handleSave = () => {
-  
     setCancelSave(false);
     setEditIdRow(true);
     API.put("/api/update", {
@@ -394,22 +400,17 @@ function UserLandPage() {
     setMonthTable(!monthTable);
   };
 
-  const handleMonthId = (e) =>{
+  const handleMonthId = (e) => {
     setMonthID(e.target.value);
+  };
 
-  }
-
-  const submitMonthData = () =>{
-
-    API.get(
-      `/api/monthData/read?condition1=${monthID}&condition2=${month}`
-    )
+  const submitMonthData = () => {
+    API.get(`/api/monthData/read?condition1=${monthID}&condition2=${month}`)
       .then((res) => {
         console.log(res);
-        
       })
       .catch((err) => console.log(err));
-  }
+  };
 
   return (
     <div>
@@ -437,421 +438,461 @@ function UserLandPage() {
           <button onClick={handleMonthData}>Monthly Data</button> 
           </div>} */}
         </div>
-
-        {monthTable && editButton ? (
-          <div>
-            <div className="rowItems">
-              <label className="fontBlue">ID</label>
-              <input type="text" placeholder="Enter ID" required="true" name="id" value={monthID} onChange={handleMonthId}></input>
-
-              <label className="fontBlue">Month</label>
-              <select
-                className="selectMonth"
-                required="true"
-                onChange={(e) => {
-                  setMonth(e.target.value);
-                }}
-              >
-                <option name="" value="Select type">
-                  Select Month
-                </option>
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-              </select>
-
-              <button onClick={submitMonthData}>Submit</button>
-            </div>
-          </div>
-        ) : (
-          <div>
-            <div className="topButtonContainer">
+        <div className="layout-container">
+          <div className="layout-1">
+            {monthTable && editButton ? (
               <div>
-                <h2 className="fontHead">{nextButton}</h2>
-                <Icon
-                  name="arrow-right"
-                  tooltip="Next Week"
-                  theme="light"
-                  size="medium"
-                  onClick={handleNextWeek}
-                  disabled={nextButton}
-                />
-              </div>
+                <div className="rowItems">
+                  <label className="fontBlue">ID</label>
+                  <input
+                    type="text"
+                    placeholder="Enter ID"
+                    required="true"
+                    name="id"
+                    value={monthID}
+                    onChange={handleMonthId}
+                  ></input>
 
+                  <label className="fontBlue">Month</label>
+                  <select
+                    className="selectMonth"
+                    required="true"
+                    onChange={(e) => {
+                      setMonth(e.target.value);
+                    }}
+                  >
+                    <option name="" value="Select type">
+                      Select Month
+                    </option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                  </select>
+
+                  <button onClick={submitMonthData}>Submit</button>
+                </div>
+              </div>
+            ) : (
               <div>
-                <button onClick={handleCurrentWeek} className="buttonCurrent">
-                  Current Week
-                </button>
-              </div>
+                <div className="topButtonContainer">
+                  <div>
+                    <h2 className="fontHead">{nextButton}</h2>
+                    <Icon
+                      name="arrow-right"
+                      tooltip="Next Week"
+                      theme="light"
+                      size="medium"
+                      onClick={handleNextWeek}
+                      disabled={nextButton}
+                    />
+                  </div>
 
-              <div>
-                <h2 className="fontHead">{nextButton}</h2>
-                <Icon
-                  name="arrow-left"
-                  tooltip="Previous Week"
-                  theme="light"
-                  size="medium"
-                  onClick={handlePreviousWeek}
-                  disabled={prevButton}
-                />
-              </div>
-            </div>
-
-            <div className="tableContainer">
-              <div className="table">
-                <table className="styled-table">
-                  {prevHead ? (
-                    <thead>
-                      <tr>
-                        <th>GED_ID</th>
-                        <th>NAME</th>
-                        <th>MANAGER NAME</th>
-                        <th>TEAM</th>
-
-                        <th>{prevWeek[0]}</th>
-                        <th>{prevWeek[1]}</th>
-                        <th>{prevWeek[2]}</th>
-                        <th>{prevWeek[3]}</th>
-                        <th>{prevWeek[4]}</th>
-                      </tr>
-                    </thead>
-                  ) : nextHead ? (
-                    <thead>
-                      <tr>
-                        {editButton ? <th></th> : null}
-                        <th>GED_ID</th>
-                        <th>NAME</th>
-                        <th>MANAGER NAME</th>
-                        <th>TEAM</th>
-
-                        <th>{nextWeek[0]}</th>
-                        <th>{nextWeek[1]}</th>
-                        <th>{nextWeek[2]}</th>
-                        <th>{nextWeek[3]}</th>
-                        <th>{nextWeek[4]}</th>
-                      </tr>
-                    </thead>
-                  ) : (
-                    <thead>
-                      <tr>
-                        {editButton ? <th></th> : null}
-                        <th>GED_ID</th>
-                        <th>NAME</th>
-                        <th>MANAGER NAME</th>
-                        <th>TEAM</th>
-
-                        <th
-                          className={
-                            checkIndiaHoliday(week[0]) && "indiaHolidays"
-                          }
-                        >
-                          {week[0]}
-                        </th>
-                        <th
-                          className={
-                            checkIndiaHoliday(week[1]) && "indiaHolidays"
-                          }
-                        >
-                          {week[1]}
-                        </th>
-                        <th>{week[2]}</th>
-                        <th>{week[3]}</th>
-                        <th>{week[4]}</th>
-                      </tr>
-                    </thead>
-                  )}
-
-                  <tbody>
-                    {userCheck ? (
-                      <tr>
-                        {editButton ? <th></th> : null}
-                        <td>{user.id}</td>
-                        <td>{user.name}</td>
-                        <td>{user.managername}</td>
-                        <td>{user.team}</td>
-                        <td>
-                          <select
-                            required="true"
-                            onChange={(e) => {
-                              setMondayWork(e.target.value);
-                            }}
-                          >
-                            <option name="" value="Select type"></option>
-                            <option value="WFH">WFH</option>
-                            <option value="ITEC">ITEC</option>
-                            <option value="LEAVE">LEAVE</option>
-                            <option value="HW">HW</option>
-                            <option value="SHIFT">SHIFT</option>
-                            <option value="C-OFF">C-OFF</option>
-                            <option value="HOLIDAY">HOLIDAY</option>
-                            <option value="OD">OD</option>
-                          </select>
-                        </td>
-                        <td>
-                          <select
-                            required="true"
-                            onChange={(e) => {
-                              setTuesdayWork(e.target.value);
-                            }}
-                          >
-                            <option name="" value="Select type"></option>
-                            <option value="WFH">WFH</option>
-                            <option value="ITEC">ITEC</option>
-                            <option value="LEAVE">LEAVE</option>
-                            <option value="HW">HW</option>
-                            <option value="SHIFT">SHIFT</option>
-                            <option value="C-OFF">C-OFF</option>
-                            <option value="HOLIDAY">HOLIDAY</option>
-                            <option value="OD">OD</option>
-                          </select>
-                        </td>
-                        <td>
-                          <select
-                            required="true"
-                            onChange={(e) => {
-                              setWednesdayWork(e.target.value);
-                            }}
-                          >
-                            <option name="" value="Select type"></option>
-                            <option value="WFH">WFH</option>
-                            <option value="ITEC">ITEC</option>
-                            <option value="LEAVE">LEAVE</option>
-                            <option value="HW">HW</option>
-                            <option value="SHIFT">SHIFT</option>
-                            <option value="C-OFF">C-OFF</option>
-                            <option value="HOLIDAY">HOLIDAY</option>
-                            <option value="OD">OD</option>
-                          </select>
-                        </td>
-                        <td>
-                          <select
-                            required="true"
-                            onChange={(e) => {
-                              setThursdayWork(e.target.value);
-                            }}
-                          >
-                            <option name="" value="Select type"></option>
-                            <option value="WFH">WFH</option>
-                            <option value="ITEC">ITEC</option>
-                            <option value="LEAVE">LEAVE</option>
-                            <option value="HW">HW</option>
-                            <option value="SHIFT">SHIFT</option>
-                            <option value="C-OFF">C-OFF</option>
-                            <option value="HOLIDAY">HOLIDAY</option>
-                            <option value="OD">OD</option>
-                          </select>
-                        </td>
-                        <td>
-                          <select
-                            required="true"
-                            onChange={(e) => {
-                              setFridayWork(e.target.value);
-                            }}
-                          >
-                            <option name="" value="Select type"></option>
-                            <option value="WFH">WFH</option>
-                            <option value="ITEC">ITEC</option>
-                            <option value="LEAVE">LEAVE</option>
-                            <option value="HW">HW</option>
-                            <option value="SHIFT">SHIFT</option>
-                            <option value="C-OFF">C-OFF</option>
-                            <option value="HOLIDAY">HOLIDAY</option>
-                            <option value="OD">OD</option>
-                          </select>
-                        </td>
-                        {/* <td><button>Submit</button></td> */}
-                      </tr>
-                    ) : null}
-
-                    {data.map((val) => (
-                      <tr key={val.id}>
-                        {editButton && !prevHead && val.id != valId ? (
-                          <Icon
-                            name="edit"
-                            tooltip="Edit"
-                            theme="light"
-                            size="small"
-                            onClick={(e) =>
-                              handleEditButton(
-                                e,
-                                val.id,
-                                val.mondaywork,
-                                val.tuesdaywork,
-                                val.wednesdaywork,
-                                val.thursdaywork,
-                                val.fridaywork
-                              )
-                            }
-                          />
-                        ) : changeIcons &&
-                          val.id == valId &&
-                          editIdRow &&
-                          !prevHead ? (
-                          <div>
-                            <Icon
-                              name="close"
-                              tooltip="Close"
-                              theme="light"
-                              size="small"
-                              onClick={handleCancel}
-                            />
-
-                            <Icon
-                              name="check"
-                              tooltip="Save"
-                              theme="light"
-                              size="small"
-                              onClick={handleSave}
-                            />
-                          </div>
-                        ) : null}
-
-                        <td>{val.gedid}</td>
-                        <td>{val.name}</td>
-                        <td>{user.managername}</td>
-                        <td>{user.team}</td>
-
-                        {editIdRow && val.id == valId ? (
-                          <td>
-                            <select
-                              required="true"
-                              onChange={(e) => {
-                                setMondayWorkUpdate(e.target.value);
-                              }}
-                            >
-                              <option value="">{val.mondaywork}</option>
-                              <option value="WFH">WFH</option>
-                              <option value="ITEC">ITEC</option>
-                              <option value="LEAVE">LEAVE</option>
-                              <option value="HW">HW</option>
-                              <option value="SHIFT">SHIFT</option>
-                              <option value="C-OFF">C-OFF</option>
-                              <option value="HOLIDAY">HOLIDAY</option>
-                              <option value="OD">OD</option>
-                            </select>
-                          </td>
-                        ) : (
-                          <td>{val.mondaywork}</td>
-                        )}
-
-                        {editIdRow && val.id == valId ? (
-                          <td>
-                            <select
-                              required="true"
-                              onChange={(e) => {
-                                setTuesdayWorkUpdate(e.target.value);
-                              }}
-                            >
-                              <option value="">{val.tuesdaywork}</option>
-                              <option value="WFH">WFH</option>
-                              <option value="ITEC">ITEC</option>
-                              <option value="LEAVE">LEAVE</option>
-                              <option value="HW">HW</option>
-                              <option value="SHIFT">SHIFT</option>
-                              <option value="C-OFF">C-OFF</option>
-                              <option value="HOLIDAY">HOLIDAY</option>
-                              <option value="OD">OD</option>
-                            </select>
-                          </td>
-                        ) : (
-                          <td>{val.tuesdaywork}</td>
-                        )}
-
-                        {editIdRow && val.id == valId ? (
-                          <td>
-                            <select
-                              required="true"
-                              onChange={(e) => {
-                                setWednesdayWorkUpdate(e.target.value);
-                              }}
-                            >
-                              <option value="">{val.wednesdaywork}</option>
-                              <option value="WFH">WFH</option>
-                              <option value="ITEC">ITEC</option>
-                              <option value="LEAVE">LEAVE</option>
-                              <option value="HW">HW</option>
-                              <option value="SHIFT">SHIFT</option>
-                              <option value="C-OFF">C-OFF</option>
-                              <option value="HOLIDAY">HOLIDAY</option>
-                              <option value="OD">OD</option>
-                            </select>
-                          </td>
-                        ) : (
-                          <td>{val.wednesdaywork}</td>
-                        )}
-
-                        {editIdRow && val.id == valId ? (
-                          <td>
-                            <select
-                              required="true"
-                              onChange={(e) => {
-                                setThursdayWorkUpdate(e.target.value);
-                              }}
-                            >
-                              <option value="">{val.thursdaywork}</option>
-                              <option value="WFH">WFH</option>
-                              <option value="ITEC">ITEC</option>
-                              <option value="LEAVE">LEAVE</option>
-                              <option value="HW">HW</option>
-                              <option value="SHIFT">SHIFT</option>
-                              <option value="C-OFF">C-OFF</option>
-                              <option value="HOLIDAY">HOLIDAY</option>
-                              <option value="OD">OD</option>
-                            </select>
-                          </td>
-                        ) : (
-                          <td>{val.thursdaywork}</td>
-                        )}
-
-                        {editIdRow && val.id == valId ? (
-                          <td>
-                            <select
-                              required="true"
-                              onChange={(e) => {
-                                setFridayWorkUpdate(e.target.value);
-                              }}
-                            >
-                              <option value="">{val.fridaywork}</option>
-                              <option value="WFH">WFH</option>
-                              <option value="ITEC">ITEC</option>
-                              <option value="LEAVE">LEAVE</option>
-                              <option value="HW">HW</option>
-                              <option value="SHIFT">SHIFT</option>
-                              <option value="C-OFF">C-OFF</option>
-                              <option value="HOLIDAY">HOLIDAY</option>
-                              <option value="OD">OD</option>
-                            </select>
-                          </td>
-                        ) : (
-                          <td>{val.fridaywork}</td>
-                        )}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-
-                {userCheck ? (
-                  <div className="submitButton">
+                  <div>
                     <button
-                      onClick={nextHead ? handleNewDataNext : handleNewData}
+                      onClick={handleCurrentWeek}
+                      className="buttonCurrent"
                     >
-                      Submit
+                      Current Week
                     </button>
                   </div>
-                ) : null}
+
+                  <div>
+                    <h2 className="fontHead">{nextButton}</h2>
+                    <Icon
+                      name="arrow-left"
+                      tooltip="Previous Week"
+                      theme="light"
+                      size="medium"
+                      onClick={handlePreviousWeek}
+                      disabled={prevButton}
+                    />
+                  </div>
+                </div>
+
+                <div className="tableContainer">
+                  <div className="table">
+                    <table className="styled-table">
+                      {prevHead ? (
+                        <thead>
+                          <tr>
+                            <th>GED_ID</th>
+                            <th>NAME</th>
+                            <th>MANAGER NAME</th>
+                            <th>TEAM</th>
+
+                            <th>{prevWeek[0]}</th>
+                            <th>{prevWeek[1]}</th>
+                            <th>{prevWeek[2]}</th>
+                            <th>{prevWeek[3]}</th>
+                            <th>{prevWeek[4]}</th>
+                          </tr>
+                        </thead>
+                      ) : nextHead ? (
+                        <thead>
+                          <tr>
+                            {editButton ? <th></th> : null}
+                            <th>GED_ID</th>
+                            <th>NAME</th>
+                            <th>MANAGER NAME</th>
+                            <th>TEAM</th>
+
+                            <th>{nextWeek[0]}</th>
+                            <th>{nextWeek[1]}</th>
+                            <th>{nextWeek[2]}</th>
+                            <th>{nextWeek[3]}</th>
+                            <th>{nextWeek[4]}</th>
+                          </tr>
+                        </thead>
+                      ) : (
+                        <thead>
+                          <tr>
+                            {editButton ? <th></th> : null}
+                            <th>GED_ID</th>
+                            <th>NAME</th>
+                            <th>MANAGER NAME</th>
+                            <th>TEAM</th>
+
+                            <th
+                              className={
+                                checkIndiaHoliday(week[0]) && "indiaHolidays"
+                              }
+                            >
+                              {week[0]}
+                            </th>
+                            <th
+                              className={
+                                checkIndiaHoliday(week[1]) && "indiaHolidays"
+                              }
+                            >
+                              {week[1]}
+                            </th>
+                            <th>{week[2]}</th>
+                            <th>{week[3]}</th>
+                            <th>{week[4]}</th>
+                          </tr>
+                        </thead>
+                      )}
+
+                      <tbody>
+                        {userCheck ? (
+                          <tr>
+                            {editButton ? <th></th> : null}
+                            <td>{user.id}</td>
+                            <td>{user.name}</td>
+                            <td>{user.managername}</td>
+                            <td>{user.team}</td>
+                            <td>
+                              <select
+                                required="true"
+                                onChange={(e) => {
+                                  setMondayWork(e.target.value);
+                                }}
+                              >
+                                <option name="" value="Select type"></option>
+                                <option value="WFH">WFH</option>
+                                <option value="ITEC">ITEC</option>
+                                <option value="LEAVE">LEAVE</option>
+                                <option value="HW">HW</option>
+                                <option value="SHIFT">SHIFT</option>
+                                <option value="C-OFF">C-OFF</option>
+                                <option value="HOLIDAY">HOLIDAY</option>
+                                <option value="OD">OD</option>
+                              </select>
+                            </td>
+                            <td>
+                              <select
+                                required="true"
+                                onChange={(e) => {
+                                  setTuesdayWork(e.target.value);
+                                }}
+                              >
+                                <option name="" value="Select type"></option>
+                                <option value="WFH">WFH</option>
+                                <option value="ITEC">ITEC</option>
+                                <option value="LEAVE">LEAVE</option>
+                                <option value="HW">HW</option>
+                                <option value="SHIFT">SHIFT</option>
+                                <option value="C-OFF">C-OFF</option>
+                                <option value="HOLIDAY">HOLIDAY</option>
+                                <option value="OD">OD</option>
+                              </select>
+                            </td>
+                            <td>
+                              <select
+                                required="true"
+                                onChange={(e) => {
+                                  setWednesdayWork(e.target.value);
+                                }}
+                              >
+                                <option name="" value="Select type"></option>
+                                <option value="WFH">WFH</option>
+                                <option value="ITEC">ITEC</option>
+                                <option value="LEAVE">LEAVE</option>
+                                <option value="HW">HW</option>
+                                <option value="SHIFT">SHIFT</option>
+                                <option value="C-OFF">C-OFF</option>
+                                <option value="HOLIDAY">HOLIDAY</option>
+                                <option value="OD">OD</option>
+                              </select>
+                            </td>
+                            <td>
+                              <select
+                                required="true"
+                                onChange={(e) => {
+                                  setThursdayWork(e.target.value);
+                                }}
+                              >
+                                <option name="" value="Select type"></option>
+                                <option value="WFH">WFH</option>
+                                <option value="ITEC">ITEC</option>
+                                <option value="LEAVE">LEAVE</option>
+                                <option value="HW">HW</option>
+                                <option value="SHIFT">SHIFT</option>
+                                <option value="C-OFF">C-OFF</option>
+                                <option value="HOLIDAY">HOLIDAY</option>
+                                <option value="OD">OD</option>
+                              </select>
+                            </td>
+                            <td>
+                              <select
+                                required="true"
+                                onChange={(e) => {
+                                  setFridayWork(e.target.value);
+                                }}
+                              >
+                                <option name="" value="Select type"></option>
+                                <option value="WFH">WFH</option>
+                                <option value="ITEC">ITEC</option>
+                                <option value="LEAVE">LEAVE</option>
+                                <option value="HW">HW</option>
+                                <option value="SHIFT">SHIFT</option>
+                                <option value="C-OFF">C-OFF</option>
+                                <option value="HOLIDAY">HOLIDAY</option>
+                                <option value="OD">OD</option>
+                              </select>
+                            </td>
+                            {/* <td><button>Submit</button></td> */}
+                          </tr>
+                        ) : null}
+
+                        {data.map((val) => (
+                          <tr key={val.id}>
+                            {editButton && !prevHead && val.id != valId ? (
+                              <Icon
+                                name="edit"
+                                tooltip="Edit"
+                                theme="light"
+                                size="small"
+                                onClick={(e) =>
+                                  handleEditButton(
+                                    e,
+                                    val.id,
+                                    val.mondaywork,
+                                    val.tuesdaywork,
+                                    val.wednesdaywork,
+                                    val.thursdaywork,
+                                    val.fridaywork
+                                  )
+                                }
+                              />
+                            ) : changeIcons &&
+                              val.id == valId &&
+                              editIdRow &&
+                              !prevHead ? (
+                              <div>
+                                <Icon
+                                  name="close"
+                                  tooltip="Close"
+                                  theme="light"
+                                  size="small"
+                                  onClick={handleCancel}
+                                />
+
+                                <Icon
+                                  name="check"
+                                  tooltip="Save"
+                                  theme="light"
+                                  size="small"
+                                  onClick={handleSave}
+                                />
+                              </div>
+                            ) : null}
+
+                            <td>{val.gedid}</td>
+                            <td>{val.name}</td>
+                            <td>{user.managername}</td>
+                            <td>{user.team}</td>
+
+                            {editIdRow && val.id == valId ? (
+                              <td>
+                                <select
+                                  required="true"
+                                  onChange={(e) => {
+                                    setMondayWorkUpdate(e.target.value);
+                                  }}
+                                >
+                                  <option value="">{val.mondaywork}</option>
+                                  <option value="WFH">WFH</option>
+                                  <option value="ITEC">ITEC</option>
+                                  <option value="LEAVE">LEAVE</option>
+                                  <option value="HW">HW</option>
+                                  <option value="SHIFT">SHIFT</option>
+                                  <option value="C-OFF">C-OFF</option>
+                                  <option value="HOLIDAY">HOLIDAY</option>
+                                  <option value="OD">OD</option>
+                                </select>
+                              </td>
+                            ) : (
+                              <td>{val.mondaywork}</td>
+                            )}
+
+                            {editIdRow && val.id == valId ? (
+                              <td>
+                                <select
+                                  required="true"
+                                  onChange={(e) => {
+                                    setTuesdayWorkUpdate(e.target.value);
+                                  }}
+                                >
+                                  <option value="">{val.tuesdaywork}</option>
+                                  <option value="WFH">WFH</option>
+                                  <option value="ITEC">ITEC</option>
+                                  <option value="LEAVE">LEAVE</option>
+                                  <option value="HW">HW</option>
+                                  <option value="SHIFT">SHIFT</option>
+                                  <option value="C-OFF">C-OFF</option>
+                                  <option value="HOLIDAY">HOLIDAY</option>
+                                  <option value="OD">OD</option>
+                                </select>
+                              </td>
+                            ) : (
+                              <td>{val.tuesdaywork}</td>
+                            )}
+
+                            {editIdRow && val.id == valId ? (
+                              <td>
+                                <select
+                                  required="true"
+                                  onChange={(e) => {
+                                    setWednesdayWorkUpdate(e.target.value);
+                                  }}
+                                >
+                                  <option value="">{val.wednesdaywork}</option>
+                                  <option value="WFH">WFH</option>
+                                  <option value="ITEC">ITEC</option>
+                                  <option value="LEAVE">LEAVE</option>
+                                  <option value="HW">HW</option>
+                                  <option value="SHIFT">SHIFT</option>
+                                  <option value="C-OFF">C-OFF</option>
+                                  <option value="HOLIDAY">HOLIDAY</option>
+                                  <option value="OD">OD</option>
+                                </select>
+                              </td>
+                            ) : (
+                              <td>{val.wednesdaywork}</td>
+                            )}
+
+                            {editIdRow && val.id == valId ? (
+                              <td>
+                                <select
+                                  required="true"
+                                  onChange={(e) => {
+                                    setThursdayWorkUpdate(e.target.value);
+                                  }}
+                                >
+                                  <option value="">{val.thursdaywork}</option>
+                                  <option value="WFH">WFH</option>
+                                  <option value="ITEC">ITEC</option>
+                                  <option value="LEAVE">LEAVE</option>
+                                  <option value="HW">HW</option>
+                                  <option value="SHIFT">SHIFT</option>
+                                  <option value="C-OFF">C-OFF</option>
+                                  <option value="HOLIDAY">HOLIDAY</option>
+                                  <option value="OD">OD</option>
+                                </select>
+                              </td>
+                            ) : (
+                              <td>{val.thursdaywork}</td>
+                            )}
+
+                            {editIdRow && val.id == valId ? (
+                              <td>
+                                <select
+                                  required="true"
+                                  onChange={(e) => {
+                                    setFridayWorkUpdate(e.target.value);
+                                  }}
+                                >
+                                  <option value="">{val.fridaywork}</option>
+                                  <option value="WFH">WFH</option>
+                                  <option value="ITEC">ITEC</option>
+                                  <option value="LEAVE">LEAVE</option>
+                                  <option value="HW">HW</option>
+                                  <option value="SHIFT">SHIFT</option>
+                                  <option value="C-OFF">C-OFF</option>
+                                  <option value="HOLIDAY">HOLIDAY</option>
+                                  <option value="OD">OD</option>
+                                </select>
+                              </td>
+                            ) : (
+                              <td>{val.fridaywork}</td>
+                            )}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+
+                    {userCheck ? (
+                      <div className="submitButton">
+                        <button
+                          onClick={nextHead ? handleNewDataNext : handleNewData}
+                        >
+                          Submit
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
               </div>
+            )}
+          </div>
+          <div className="layout-2">
+            <div className="fixTableHead">
+              {tableData.map((val) => {
+                return (
+                  <>
+                    <h1 className="tb-holiday-h1">{val.country}</h1>
+                    <table className="styled-table">
+                      <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Holiday Detail</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {val.data.map((data) => (
+                          <tr key={data.id}>
+                            <td>{data.date}</td>
+                            <td>{data.name}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </>
+                );
+              })}
             </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

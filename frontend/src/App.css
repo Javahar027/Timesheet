@@ -1,14 +1,12 @@
-
-.container{
+.container {
   padding: 70px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  
 }
 
-.formContainer{
+.formContainer {
   padding: 50px;
   background-color: rgba(14, 86, 193, 0.929);
   display: flex;
@@ -16,29 +14,26 @@
   align-items: center;
   /* border: 5px solid slateblue; */
   border-radius: 10px;
-  
 }
-label{
+label {
   padding: 10px;
   display: flex;
- 
+
   justify-content: center;
 }
 
-input{
+input {
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
-  
 }
-button{
+button {
   margin: 20px;
   padding: 10px;
   background-color: white;
   color: black;
   border-radius: 15px;
   cursor: pointer;
-
 }
 
 /* .button1:hover {
@@ -51,8 +46,8 @@ button{
   /* background-color: transparent; */
   border: 1px solid black;
   /* border-radius: 50px; */
-  -webkit-transition: all .15s ease-in-out;
-  transition: all .15s ease-in-out;
+  -webkit-transition: all 0.15s ease-in-out;
+  transition: all 0.15s ease-in-out;
   color: black;
 }
 .button1:hover {
@@ -60,22 +55,19 @@ button{
   border: 1px solid black;
 }
 
-
-.header{
-  padding:10px;
+.header {
+  padding: 10px;
   background-color: rgba(14, 86, 193, 0.929);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  
-
 }
-.userContainer{
+.userContainer {
   margin: 15px;
-  height: 100vh;
+  /* height: 100vh; */
   /* background-color: black; */
 }
-.tableContainer{
+.tableContainer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -83,126 +75,117 @@ button{
   /* background-color:black; */
 }
 
-.submitButton{
+.submitButton {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.topContainer{
- 
+.topContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  
-  
 }
 
-.topButtonContainer{
+.topButtonContainer {
   display: flex;
   flex-direction: row-reverse;
-  margin-right: 120px;
-  
+  /* background-color: red; */
+  justify-content: center;
 }
 
-.fontBlack{
+.fontBlack {
   color: black;
 }
 
-.loginStatus{
+.loginStatus {
   color: red;
 }
-.countryLabel{
+.countryLabel {
   color: rgba(14, 86, 193, 0.929);
   font-weight: bolder;
   padding: 15px;
 }
-.countryDropDown{
+.countryDropDown {
   width: 70%;
   height: 25px;
   border: 2px solid black;
   border-radius: 5px;
 }
-.holidayContainer{
+.holidayContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.fontHead{
+.fontHead {
   color: rgba(14, 86, 193, 0.929);
   font-weight: bolder;
 }
-.buttonCurrent{
-  color:  rgba(14, 86, 193, 0.929);
+.buttonCurrent {
+  color: rgba(14, 86, 193, 0.929);
   font-weight: bolder;
-  border:none ;
+  border: none;
   cursor: pointer;
   border-radius: 0px;
-  border-bottom:2px solid rgba(14, 86, 193, 0.929) ;
+  border-bottom: 2px solid rgba(14, 86, 193, 0.929);
 }
 
-.buttonNavBar{
+.buttonNavBar {
   color: white;
-  background-color:rgba(14, 86, 193, 0.929) ;
+  background-color: rgba(14, 86, 193, 0.929);
   font-weight: bolder;
-  border:none ;
+  border: none;
   cursor: pointer;
-  border-bottom:2px solid white ;
+  border-bottom: 2px solid white;
 }
 
-.holidayModel{
+.holidayModel {
   margin-top: 2%;
-  margin-left: 30%; 
+  margin-left: 30%;
 
   background-color: white;
   width: 40%;
-  
 }
 .fixTableHead {
   overflow-y: auto;
   height: 300px;
+  padding: 0 10px;
 }
 .fixTableHead thead th {
-  position: sticky;
+  /* position: sticky; */
   top: 0;
 }
 table {
-  border-collapse: collapse;        
+  border-collapse: collapse;
   width: 100%;
 }
 th,
 td {
   padding: 8px 15px;
-  
 }
 th {
   background: rgba(14, 86, 193, 0.929);
 }
 
-.indiaHolidays{
+.indiaHolidays {
   color: red;
 }
 
-.rowItems{
+.rowItems {
   display: flex;
   flex-direction: row;
   align-items: center;
- 
 }
-.fontBlue{
-  color:  rgba(14, 86, 193, 0.929);
+.fontBlue {
+  color: rgba(14, 86, 193, 0.929);
   font-weight: bold;
 }
-.selectMonth{
+.selectMonth {
   padding: 10px;
   border: 1px solid black;
-  border-radius: 5px; 
+  border-radius: 5px;
   width: 170px;
 }
-
-
-
-
 
 .styled-table {
   border-collapse: collapse;
@@ -213,7 +196,7 @@ th {
 }
 
 .styled-table thead tr {
-  background-color:  rgba(14, 86, 193, 0.929);
+  background-color: rgba(14, 86, 193, 0.929);
   color: white;
   text-align: center;
 }
@@ -224,9 +207,9 @@ th {
 }
 
 .styled-table tbody tr {
-  color:  rgba(14, 86, 193, 0.929);
-  font-weight:bolder ;
-  border-bottom: 1px solid  rgba(14, 86, 193, 0.929);
+  color: rgba(14, 86, 193, 0.929);
+  font-weight: bolder;
+  border-bottom: 1px solid rgba(14, 86, 193, 0.929);
 }
 
 .styled-table tbody tr:nth-of-type(even) {
@@ -239,26 +222,29 @@ th {
 
 .styled-table tbody tr.active-row {
   font-weight: bold;
-  color:  rgba(14, 86, 193, 0.929);
+  color: rgba(14, 86, 193, 0.929);
 }
 
+.layout-container {
+  display: flex;
+}
 
+.layout-1 {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
 
+.layout-2 {
+  /* background-color: green; */
+  display: flex;
+  flex-direction: column;
+  flex: 0.3;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.tb-holiday-h1 {
+  font-size: large;
+  color: rgba(14, 86, 193, 0.929);
+  margin-left: 10px;
+  margin-top: 40px;
+}
